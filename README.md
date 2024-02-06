@@ -1,9 +1,9 @@
 <!--
  * @Author: Peng Guo & <wyguopeng@163.com>
  * @Date: 2024-02-05 02:52:31
- * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-02-07 00:21:18
- * @FilePath: /nccl-gp/README_GP.md
+ * @LastEditors: pguo peng.guo@montage-tech.com
+ * @LastEditTime: 2024-02-06 17:39:13
+ * @FilePath: \NCCL_GP\README.md
  * @Description: 
  * 
  * Copyright (c) 2024 by <wyguopeng@163.com, All Rights Reserved. 
@@ -43,15 +43,20 @@ NCCL_ROOT_DIR 指向源码路径，最后的根号不需要
 6. GPU_DEV_NUM
    指定网络图谱中 GPU 的设备数量，测试文件需要，默认为 3 个
 
+7. NCCL_DEBUG & NCCL_DEBUG_SUBSYS 
+   NCCL 自带的调试日志级别，级别最大，更多的打印
+
 ```bash
 
 export NCCL_ROOT_DIR=/home/gp/gp/nccl-gp
 export CUDA_LIB=$NCCL_ROOT_DIR/fake_cuda/lib
 export CUDA_INC=$NCCL_ROOT_DIR/fake_cuda/include
-export LD_LIBRARY_PATH=$NCCL_ROOT_DIR/fake_cuda/lib:/home/gp/gp/nccl-gp/build/lib
+export LD_LIBRARY_PATH=$NCCL_ROOT_DIR/fake_cuda/lib:$NCCL_ROOT_DIR/build/lib
 export NCCL_TOPO_FILE=$NCCL_ROOT_DIR/topo/nccl_topo.xml
 export NCCL_GRAPH_DUMP_FILE=$NCCL_ROOT_DIR/topo/graph_dump.xml
 export GPU_DEV_NUM=5
+export NCCL_DEBUG=TRACE
+export NCCL_DEBUG_SUBSYS=ALL
 
 ```
 

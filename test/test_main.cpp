@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     char* env = getenv("GPU_DEV_NUM");
     if (env) {
       nDev = atoi(env);
-      printf("GPU Dev setted by User %d\n", nDev);
+      printf("GPU Dev num set by User %d\n", nDev);
     }
     //managing 4 devices
     int i;
