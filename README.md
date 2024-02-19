@@ -1,23 +1,4 @@
-<!--
- * @Author: Peng Guo & <peng.guo@montage-tech.com>
- * @Date: 2024-02-06 17:37:49
- * @LastEditors: pguo peng.guo@montage-tech.com
- * @LastEditTime: 2024-02-19 10:38:13
- * @FilePath: \NCCL_GP\README.md
- * @Description: 
- * 
- * Copyright (c) 2024 by Montage Technology Corporation, All Rights Reserved. 
--->
-<!--
- * @Author: Peng Guo & <wyguopeng@163.com>
- * @Date: 2024-02-05 02:52:31
- * @LastEditors: pguo peng.guo@montage-tech.com
- * @LastEditTime: 2024-02-19 09:59:09
- * @FilePath: \NCCL_GP\README.md
- * @Description: 
- * 
- * Copyright (c) 2024 by <wyguopeng@163.com, All Rights Reserved. 
--->
+
 [toc]
 
 # 程序运行编译流程
