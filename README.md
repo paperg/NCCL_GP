@@ -2,13 +2,13 @@
  * @Author: Peng Guo & <wyguopeng@163.com>
  * @Date: 2024-02-05 02:52:31
  * @LastEditors: pguo peng.guo@montage-tech.com
- * @LastEditTime: 2024-02-06 17:39:13
+ * @LastEditTime: 2024-02-19 09:59:09
  * @FilePath: \NCCL_GP\README.md
  * @Description: 
  * 
  * Copyright (c) 2024 by <wyguopeng@163.com, All Rights Reserved. 
 -->
-
+[toc]
 
 # 程序运行编译流程
 
@@ -24,7 +24,7 @@
 ## 环境变量设置
 
 **！！！ 环境变量必须设置，否则编译一定会有问题 ！！！**
-
+***只有 NCCL_ROOT_DIR 需要自定义，其他的不变即可***
 1. NCCL_ROOT_DIR
 NCCL_ROOT_DIR 指向源码路径，最后的根号不需要
 
@@ -72,6 +72,9 @@ export NCCL_DEBUG_SUBSYS=ALL
 make -j4 DEBUG=1 TRACE=1 VERBOSE=1 NVCC_GENCODE="-gencode=arch=compute_80,code=sm_80"
 ```
 
+## 测试
+测试程序，或者说程序入口在 test/ 目录下，编译完成后会有 test_main 可执行程序。
+test/test_dev_process.cpp 是使用 MPI 的多进程测试程序。
 
 # 其他
 
