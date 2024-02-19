@@ -2,7 +2,7 @@
  * @Author: Peng Guo & <peng.guo@montage-tech.com>
  * @Date: 2024-02-06 17:37:49
  * @LastEditors: pguo peng.guo@montage-tech.com
- * @LastEditTime: 2024-02-19 10:31:10
+ * @LastEditTime: 2024-02-19 10:38:13
  * @FilePath: \NCCL_GP\README.md
  * @Description: 
  * 
@@ -35,6 +35,7 @@
 
 **！！！ 环境变量必须设置，否则编译一定会有问题 ！！！**
 ***只有 NCCL_ROOT_DIR 需要自定义，其他的不变即可***
+***修改 NCCL_TOPO_FILE 变量指定拓扑XML文件，可以修改文件，设计拓扑结构, 默认使用 topo/nvlink_5GPU.xml***
 1. NCCL_ROOT_DIR
 NCCL_ROOT_DIR 指向源码路径，最后的根号不需要
 
@@ -62,7 +63,7 @@ export NCCL_ROOT_DIR=/home/gp/gp/nccl-gp
 export CUDA_LIB=$NCCL_ROOT_DIR/fake_cuda/lib
 export CUDA_INC=$NCCL_ROOT_DIR/fake_cuda/include
 export LD_LIBRARY_PATH=$NCCL_ROOT_DIR/fake_cuda/lib:$NCCL_ROOT_DIR/build/lib
-export NCCL_TOPO_FILE=$NCCL_ROOT_DIR/topo/nccl_topo.xml
+export NCCL_TOPO_FILE=$NCCL_ROOT_DIR/topo/nvlink_5GPU.xml
 export NCCL_GRAPH_DUMP_FILE=$NCCL_ROOT_DIR/topo/graph_dump.xml
 export GPU_DEV_NUM=5
 export NCCL_DEBUG=TRACE
