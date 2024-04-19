@@ -66,7 +66,7 @@ static ncclResult_t ncclTopoSetPaths(struct ncclTopoNode* baseNode, struct ncclT
         // allow routing through a GPU only as 1 hop
         if (node != baseNode && node->type == GPU &&
             (ncclParamNvbDisable() || link->type != LINK_NVL || remNode->type != GPU || path->count > 1)) continue;
-
+        INFO(NCCL_GRAPH, "Node 0x%lx To BaseNode 0x%lx : path->bw (%f) GB/s bw (%f) GB/s if Remote Node 0x%lx to BaseNode", node->id, baseNode->id, path->bw, bw, remNode->id);
         if ((remPath->bw == 0 || remPath->count > path->count) && remPath->bw < bw) {
           // Find reverse link
           for (int l=0; l<remNode->nlinks; l++) {
@@ -84,7 +84,7 @@ static ncclResult_t ncclTopoSetPaths(struct ncclTopoNode* baseNode, struct ncclT
           for (int i=0; i<path->count; i++) remPath->list[i+1] = path->list[i];
           remPath->count = path->count + 1;
           remPath->bw = bw;
-
+          INFO(NCCL_GRAPH, "Remote Node 0x%lx To BaseNode 0x%lx, path count (%d) bw (%f) GB/s", remNode->id, baseNode->id, remPath->count, remPath->bw);
           // Start with path type = link type. PATH and LINK types are supposed to match.
           // Don't consider LINK_NET as we only care about the NIC->GPU path.
           int type = link->type == LINK_NET ? LINK_LOC : link->type;
@@ -96,7 +96,7 @@ static ncclResult_t ncclTopoSetPaths(struct ncclTopoNode* baseNode, struct ncclT
           if (node->type == GPU && path->type == PATH_NVL && type == PATH_NVL && remPath->count > 1) type = PATH_NVB;
 
           remPath->type = std::max(path->type, type);
-
+          INFO(NCCL_GRAPH, "Remote Node 0x%lx To BaseNode 0x%lx, path type (%d)", remNode->id, baseNode->id,  remPath->type);
           // Add to the list for the next iteration if not already in the list
           int i;
           for (i=0; i<nextNodeList.count; i++) if (nextNodeList.list[i] == remNode) break;
@@ -129,7 +129,7 @@ static void printNodePaths(struct ncclTopoSystem* system, struct ncclTopoNode* n
         sprintf(line+offset, "--%s->%s/%lX", topoLinkTypeStr[link->type], topoNodeTypeStr[remNode->type], remNode->id);
         offset = strlen(line);
       }
-      INFO(NCCL_GRAPH, "%s (%f)", line, node->paths[t][n].bw);
+      INFO(NCCL_GRAPH, "%s (%f) %s", line, node->paths[t][n].bw, topoPathTypeStr[node->paths[t][n].type]);
 #else
       sprintf(line+offset, "%s/%lX (%d/%f/%s) ", topoNodeTypeStr[t], system->nodes[t].nodes[n].id, node->paths[t][n].count, node->paths[t][n].bw, topoPathTypeStr[node->paths[t][n].type]);
       offset = strlen(line);

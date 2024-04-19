@@ -2,7 +2,7 @@
  * @Author: Peng Guo & <wyguopeng@163.com>
  * @Date: 2024-01-24 00:37:34
  * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-02-06 23:33:44
+ * @LastEditTime: 2024-04-02 11:02:29
  * @FilePath: /nccl-gp/test/test_main.cpp
  * @Description: 
  * 
@@ -56,21 +56,39 @@ int main(int argc, char* argv[])
     float** recvbuff = (float**)malloc(nDev * sizeof(float*));
     cudaStream_t* s = (cudaStream_t*)malloc(sizeof(cudaStream_t)*nDev);
 
+    for (int i = 0; i < nDev; ++i) {
+      CUDACHECK(cudaSetDevice(i));
+      CUDACHECK(cudaMalloc((void**)sendbuff + i, size * sizeof(float)));
+      CUDACHECK(cudaMalloc((void**)recvbuff + i, size * sizeof(float)));
+      CUDACHECK(cudaMemset(sendbuff[i], 1, size * sizeof(float)));
+      CUDACHECK(cudaMemset(recvbuff[i], 0, size * sizeof(float)));
+      CUDACHECK(cudaStreamCreate(s+i));
+    }
+  
     //initializing NCCL
     NCCLCHECK(ncclCommInitAll(comms, nDev, devs));
 
     //calling NCCL communication API. Group API is required when using
     // multiple devices per thread
-    // NCCLCHECK(ncclGroupStart());
-    // for (int i = 0; i < nDev; ++i)
-    //     NCCLCHECK(ncclAllReduce((const void*)sendbuff[i], (void*)recvbuff[i], size, ncclFloat, ncclSum,
-    //         comms[i], s[i]));
-    // NCCLCHECK(ncclGroupEnd());
+    // ncclResult_t ncclSend(const void* sendbuff, size_t count, ncclDataType_t datatype, int peer,
+    // ncclComm_t comm, cudaStream_t stream) 
+        // for (int i = 0; i < nDev; ++i)
+        // NCCLCHECK(ncclAllReduce((const void*)sendbuff[i], (void*)recvbuff[i], size, ncclFloat, ncclSum,
+        //     comms[i], s[i]));
+    NCCLCHECK(ncclGroupStart());
+    NCCLCHECK(ncclSend(sendbuff[0], (void*)recvbuff[0], size, ncclFloat, 1, comm[0], s[0]));
+    NCCLCHECK(ncclGroupEnd());
+
+    for (int i = 0; i < nDev; ++i) {
+      CUDACHECK(cudaSetDevice(i));
+      CUDACHECK(cudaStreamSynchronize(s[i]));
+    }
 
     // free device buffers
     for (int i = 0; i < nDev; ++i) {
-        free(sendbuff[i]);
-        free(recvbuff[i]);
+      CUDACHECK(cudaSetDevice(i));
+      CUDACHECK(cudaFree(sendbuff[i]));
+      CUDACHECK(cudaFree(recvbuff[i]));
     }
 
     if(s)

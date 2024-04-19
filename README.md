@@ -40,7 +40,7 @@ NCCL_ROOT_DIR 指向源码路径，最后的根号不需要
 
 ```bash
 
-export NCCL_ROOT_DIR=/home/gp/gp/nccl-gp
+export NCCL_ROOT_DIR=/home/gp/work/NCCL_GP
 export CUDA_LIB=$NCCL_ROOT_DIR/fake_cuda/lib
 export CUDA_INC=$NCCL_ROOT_DIR/fake_cuda/include
 export LD_LIBRARY_PATH=$NCCL_ROOT_DIR/fake_cuda/lib:$NCCL_ROOT_DIR/build/lib

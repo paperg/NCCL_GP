@@ -160,7 +160,7 @@ ncclResult_t ncclTopoConnectNodes(struct ncclTopoNode* node, struct ncclTopoNode
   link->type = type;
   link->remNode = remNode;
   link->bw += bw;
-
+  INFO(NCCL_GRAPH, "Connct Node 0x%lx to 0x%lx, Node nlinks %d type %d bw %f GB/s", node->id, remNode->id, node->nlinks, link->type, link->bw);
   // Sort links in BW descending order
   struct ncclTopoLink linkSave;
   memcpy(&linkSave, link, sizeof(struct ncclTopoLink));
