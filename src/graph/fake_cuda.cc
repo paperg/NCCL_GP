@@ -61,10 +61,11 @@ static char exist_gpu_num = 0;
 // 保留指针，后面用到一些信息
 static struct ncclTopoSystem *local_sys_top;
 
-int get_info_from_topo(struct ncclTopoSystem* system)
+int get_info_from_topo(struct ncclTopoSystem* system, int ngpu)
 {
     int rank, i;
     local_sys_top = system;
+    system->nodes[GPU].count = ngpu;
     exist_gpu_num = system->nodes[GPU].count;
     for(i = 0; i < exist_gpu_num; i++) {
         rank = system->nodes[GPU].nodes[i].gpu.rank;

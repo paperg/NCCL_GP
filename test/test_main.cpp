@@ -56,39 +56,21 @@ int main(int argc, char* argv[])
     float** recvbuff = (float**)malloc(nDev * sizeof(float*));
     cudaStream_t* s = (cudaStream_t*)malloc(sizeof(cudaStream_t)*nDev);
 
-    for (int i = 0; i < nDev; ++i) {
-      CUDACHECK(cudaSetDevice(i));
-      CUDACHECK(cudaMalloc((void**)sendbuff + i, size * sizeof(float)));
-      CUDACHECK(cudaMalloc((void**)recvbuff + i, size * sizeof(float)));
-      CUDACHECK(cudaMemset(sendbuff[i], 1, size * sizeof(float)));
-      CUDACHECK(cudaMemset(recvbuff[i], 0, size * sizeof(float)));
-      CUDACHECK(cudaStreamCreate(s+i));
-    }
-  
     //initializing NCCL
     NCCLCHECK(ncclCommInitAll(comms, nDev, devs));
 
     //calling NCCL communication API. Group API is required when using
     // multiple devices per thread
-    // ncclResult_t ncclSend(const void* sendbuff, size_t count, ncclDataType_t datatype, int peer,
-    // ncclComm_t comm, cudaStream_t stream) 
-        // for (int i = 0; i < nDev; ++i)
-        // NCCLCHECK(ncclAllReduce((const void*)sendbuff[i], (void*)recvbuff[i], size, ncclFloat, ncclSum,
-        //     comms[i], s[i]));
-    NCCLCHECK(ncclGroupStart());
-    NCCLCHECK(ncclSend(sendbuff[0], (void*)recvbuff[0], size, ncclFloat, 1, comm[0], s[0]));
-    NCCLCHECK(ncclGroupEnd());
-
-    for (int i = 0; i < nDev; ++i) {
-      CUDACHECK(cudaSetDevice(i));
-      CUDACHECK(cudaStreamSynchronize(s[i]));
-    }
+    // NCCLCHECK(ncclGroupStart());
+    // for (int i = 0; i < nDev; ++i)
+    //     NCCLCHECK(ncclAllReduce((const void*)sendbuff[i], (void*)recvbuff[i], size, ncclFloat, ncclSum,
+    //         comms[i], s[i]));
+    // NCCLCHECK(ncclGroupEnd());
 
     // free device buffers
     for (int i = 0; i < nDev; ++i) {
-      CUDACHECK(cudaSetDevice(i));
-      CUDACHECK(cudaFree(sendbuff[i]));
-      CUDACHECK(cudaFree(recvbuff[i]));
+        free(sendbuff[i]);
+        free(recvbuff[i]);
     }
 
     if(s)

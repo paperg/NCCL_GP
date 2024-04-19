@@ -25,7 +25,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 // Add
-extern int get_info_from_topo(struct ncclTopoSystem* system);
+extern int get_info_from_topo(struct ncclTopoSystem* system, int ngpu);
 
 
 #define STR2(v) #v
@@ -1601,7 +1601,7 @@ static ncclResult_t ncclCommInitRankDev(ncclComm_t* newcomm, int nranks, ncclUni
 
   // Add: First get topo from file, so that we can know how many device in system
   NCCLCHECKGOTO(ncclTopoGetSystem(comm, &comm->topo), res, fail);
-  get_info_from_topo(comm->topo);
+  get_info_from_topo(comm->topo, nranks);
 
   NCCLCHECKGOTO(ncclAsyncLaunch(&job->base, ncclCommInitRankFunc, NULL, free, comm), res, fail);
 
