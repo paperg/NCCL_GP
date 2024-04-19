@@ -54,12 +54,19 @@ export NCCL_DEBUG_SUBSYS=ALL
 
 ## 编译命令
 
+**Note:** 编译前确保 run.sh 以及  src/collectivates/device/gen_rules.sh 两个脚本有可执行权限，使用如下命令增加可执行权限。
+
+```bash
+chmod +x ./run.sh
+chmod +x src/collectivates/device/gen_rules.sh
+```
+
 1. 直接运行脚本
 ```bash
 ./run.sh
 ```
 
-2. 或者使用命令
+1. 或者使用命令
 ```bash
 make -j4 DEBUG=1 TRACE=1 VERBOSE=1 NVCC_GENCODE="-gencode=arch=compute_80,code=sm_80"
 ```
